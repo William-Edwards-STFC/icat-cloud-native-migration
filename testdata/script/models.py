@@ -842,7 +842,38 @@ class INVESTIGATIONINSTRUMENT(Base, EntityHelper, metaclass=EntityMeta):
         backref="investigationInstruments",
     )
 
+class INVESTIGATIONFACILITYCYCLE(Base, EntityHelper, metaclass=EntityMeta):
+    __tablename__ = "INVESTIGATIONFACILITYCYCLE"
+    __singularfieldname__ = "InvestigationFacilityCycle"
+    __pluralfieldname__ = "InvestigationFacilityCycles"
+    __table_args__ = (
+        Index("UNQ_INVESTIGATIONFACILITYCYCLE_0", "INVESTIGATION_ID", "FACILITYCYCLE_ID"),
+    )
 
+    id = Column("ID", BigInteger, primary_key=True)
+    createId = Column("CREATE_ID", String(255), nullable=False)
+    createTime = Column("CREATE_TIME", DateTime, nullable=False)
+    modId = Column("MOD_ID", String(255), nullable=False)
+    modTime = Column("MOD_TIME", DateTime, nullable=False)
+
+    facilityCycleID = Column(
+        "FACILITYCYCLE_ID", ForeignKey("FACILITYCYCLE.ID"), nullable=False
+    )
+    investigationID = Column(
+        "INVESTIGATION_ID", ForeignKey("INVESTIGATION.ID"), nullable=False,
+    )
+
+    INVESTIGATION = relationship(
+        "INVESTIGATION",
+        primaryjoin="INVESTIGATIONFACILITYCYCLE.investigationID == INVESTIGATION.id",
+        backref="InvestigationFacilityCycles",
+    )
+    FACILITYCYCLE = relationship(
+        "FACILITYCYCLE",
+        primaryjoin="INVESTIGATIONFACILITYCYCLE.facilityCycleID == FACILITYCYCLE.id",
+        backref="InvestigationFacilityCycles",
+    )
+    
 class INVESTIGATIONPARAMETER(Base, EntityHelper, metaclass=EntityMeta):
     __tablename__ = "INVESTIGATIONPARAMETER"
     __singularfieldname__ = "investigationParameter"

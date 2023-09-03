@@ -440,6 +440,24 @@ class UserGroupGenerator(Generator):
         user_group.userID = i
         post_entity(user_group)
 
+class InvestigationFacilityCycleGenerator(Generator):
+    tier = 3
+    amount = InvestigationGenerator.amount  # Must equal number of investigations
+
+    def generate(self):
+        for i in range(1, self.amount):
+            InvestigationFacilityCycleGenerator.generate_investigation_facility_cycle(i)
+
+    @staticmethod
+    def generate_investigation_facility_cycle(i):
+        investigation_facility_cycle = models.INVESTIGATIONFACILITYCYCLE()
+        apply_common_attributes(investigation_facility_cycle, i)
+        investigation_facility_cycle.investigationID = i
+        investigation_facility_cycle.facilityCycleID = faker.random_int(
+            1, FacilityCycleGenerator.amount - 1,
+        )
+        post_entity(investigation_facility_cycle)
+
 
 class StudyGenerator(Generator):
     tier = 3
